@@ -11,6 +11,7 @@ export class Executer{
     private sched_:sched.Sched = new sched.Sched();
     private ticker_:ticker.Ticker = new ticker.Ticker();
     constructor(){
+        this.ticker_.update();
     }
     public stop():void{
         this.is_run_ = false;

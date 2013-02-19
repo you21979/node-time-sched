@@ -2,9 +2,9 @@
 import timesched = module('index');
 import executer = module('executer');
 var e:Function = executer.executer;
-var f:Function = ()=>{console.log(process.uptime());}
+var f:Function = ()=>{console.log("x:"+process.uptime());}
 for(var i:number=0; i<6; ++i){
-    e().addTask(f, i);
+    console.log(e().addTask(f, i));
 }
 e().addTask(function(){
     process.exit(-1);

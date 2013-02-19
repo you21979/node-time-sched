@@ -2,104 +2,113 @@
 export interface INode{
     next:INode;
 }
-function snode_rpush(parent:INode, child:INode):void{
-    if(parent){
-        var n:INode = parent.next;
-        parent.next = child;
-        child.next = n;
-    }
-}
-function snode_lpush(parent:INode, child:INode):void{
+function node_push(parent:INode, child:INode):void{
     if(parent){
         if(parent.next){
-            snode_lpush(parent.next, child);
+            node_push(parent.next, child);
         }else{
             parent.next = child;
         }
     }
 }
-function snode_condpush(parent:INode, child:INode, condFunc:(a:INode, b:INode)=>bool):void{
-//    if(parent instanceof)
-    if(parent){
-        if(parent.next){
-            var ret:bool = condFunc(parent, child);
-            if(ret){
-                snode_rpush(parent, child);
-            }else{
-                snode_condpush(parent.next, child, condFunc);
-            }
-        }else{
-            parent.next = child;
-        }
-    }
-}
-class HeadNode implements INode{
-    constructor (public next:INode){
-    }
-}
-class SNode implements INode{
+export class SNode implements INode{
     public next:INode = null;
-    constructor (public n:number){
-    }
+    constructor(){}
 }
 export class SList{
-    private head_:HeadNode;
-    constructor(){
-        this.head_ = new HeadNode(null);
-    }
+    private head_:INode = null;
+    constructor(){}
     // 速い
-    public rpush(node:INode):void{
-        snode_rpush(this.head_, node);
+    public unshift(node:INode):void{
+        var old:INode = this.head_;
+        node.next = old;
+        this.head_ = node;
     }
     // 遅い
-    public lpush(node:INode):void{
-        snode_lpush(this.head_, node);
+    public push(node:INode):void{
+        if(this.head_ === null){
+            this.head_ = node;
+            return;
+        }
+        node_push(this.head_, node);
     }
-    public condPush(node:INode, condFunc:(a:INode, b:INode)=>bool){
-        snode_condpush(this.head_, node, condFunc);
+    // 条件を指定
+    public insert(node:INode, condFunc:(a:INode, b:INode)=>bool){
+        if(this.head_ === null){
+            this.head_ = node;
+            return;
+        }
+        var f = (prev:INode, parent:INode):void=>{
+            if(parent){
+                var ret:bool = condFunc(parent, node);
+                if(ret){
+                    node.next = parent;
+                    if(prev === null){
+                        this.head_ = node;
+                    }else{
+                        prev.next = node;
+                    }
+                }else{
+                    f(parent, parent.next);
+                }
+            }else{
+                prev.next = node;
+            }
+        }
+        f(null, this.head_);
     }
-    public scan(func:Function):void{
+    public same(func:(v:INode)=>bool):void{
         var n:INode = this.head_;
-        while(n = n.next){
+        while(n){
             var ret:bool = func(n);
             if(!ret){
                 break;
             }
+            n = n.next;
+        }
+    }
+    public forEach(func:(v:INode)=>void):void{
+        var n:INode = this.head_;
+        while(n){
+            func(n);
+            n = n.next;
         }
     }
 }
-
-
+/*
 var x = function(){
     var l:SList = new SList();
     var cond = (a:SNode, b:SNode):bool=>{
-        if(a instanceof SNode) return a.n < b.n;
-        return true;
+        return a.n > b.n;
     }
-    l.condPush(new SNode(1), cond);
-    l.condPush(new SNode(2), cond);
-    l.condPush(new SNode(3), cond);
-    l.condPush(new SNode(4), cond);
-    l.condPush(new SNode(5), cond);
-    l.condPush(new SNode(6), cond);
-    l.condPush(new SNode(7), cond);
-    l.condPush(new SNode(8), cond);
-    l.condPush(new SNode(9), cond);
-/*
-    l.lpush(new SNode());
-    l.lpush(new SNode());
-    l.lpush(new SNode());
-    l.lpush(new SNode());
-    l.lpush(new SNode());
-    l.lpush(new SNode());
-    l.lpush(new SNode());
-    l.lpush(new SNode());
-*/
-    l.scan((node:SNode)=>{
+    l.insert(new SNode(Math.random()), cond);
+    l.insert(new SNode(Math.random()), cond);
+    l.insert(new SNode(Math.random()), cond);
+    l.insert(new SNode(1), cond);
+    l.insert(new SNode(1), cond);
+    l.insert(new SNode(1), cond);
+    l.insert(new SNode(Math.random()), cond);
+    l.insert(new SNode(Math.random()), cond);
+    l.insert(new SNode(Math.random()), cond);
+    l.insert(new SNode(Math.random()), cond);
+    l.insert(new SNode(Math.random()), cond);
+    l.insert(new SNode(Math.random()), cond);
+    l.insert(new SNode(Math.random()), cond);
+    l.unshift(new SNode(1));
+    l.push(new SNode(2));
+    l.push(new SNode(3));
+    l.push(new SNode(4));
+    l.push(new SNode(5));
+    l.push(new SNode(6));
+    l.push(new SNode(1));
+    l.push(new SNode(2));
+    l.push(new SNode(3));
+    l.push(new SNode(4));
+    l.push(new SNode(5));
+    l.same((node:SNode)=>{
         console.log(node.n);
         return true;
     });
-console.log(l);
 }
 x();
-
+*/

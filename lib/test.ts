@@ -1,5 +1,4 @@
 ///<reference path='node.d'/>
-import timesched = module('index');
 import executer = module('executer');
 var e:Function = executer.executer;
 var f:Function = ()=>{console.log("x:"+process.uptime());}

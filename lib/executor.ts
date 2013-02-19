@@ -3,7 +3,11 @@ import d = module('dependencies');
 import sched = module('sched');
 import ticker = module('ticker');
 import task = module('task');
-var taskExecutor:(arg:Function)=>void = d.createExecutor(0);
+var DEFAULT_RESOLUTION:number = 0;
+var taskExecutor:(arg:Function)=>void = d.createExecutor(DEFAULT_RESOLUTION);
+/**
+ *  実行クラス
+ */
 export class Executor{
     private is_run_:bool = false;
     private sched_:sched.Sched = new sched.Sched();
@@ -30,6 +34,9 @@ export class Executor{
     public addTask(func:Function,wait_time:number):task.Task{
         return this.sched_.addTask(func, this.ticker_.futureTick(wait_time));
     }
+}
+export function initialize(resolution:number):void{
+    taskExecutor = d.createExecutor(resolution);
 }
 export module executor{
     var instance_:Executor = null;

@@ -1,6 +1,10 @@
 ///<reference path='node.d'/>
 import d = module('dependencies');
 import task = module('task');
+/**
+ * Schedクラス
+ * @class
+ */ 
 export class Sched{
     private list_:task.Task[] = [];
     private tick_:number = -1;
@@ -14,7 +18,9 @@ export class Sched{
             if(v.invoke_tick > now){
                 return false;
             }
-            v.func();
+            if(v.func){
+                v.func();
+            }
             remove.push(idx);
             return true;
         });
@@ -28,5 +34,10 @@ export class Sched{
         this.list_.push(t);
         this.list_.sort((a:task.Task,b:task.Task)=>a.invoke_tick-b.invoke_tick);
         return t;
+    }
+    public removeTask(t:task.Task):void{
+        if(t){
+            t.func = null;
+        }
     }
 }

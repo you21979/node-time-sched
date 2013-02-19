@@ -3,10 +3,8 @@ import d = module('dependencies');
 import sched = module('sched');
 import ticker = module('ticker');
 import task = module('task');
-
-var taskExecuter:(arg:Function)=>void = d.createExecuter(0);
-
-export class Executer{
+var taskExecutor:(arg:Function)=>void = d.createExecutor(0);
+export class Executor{
     private is_run_:bool = false;
     private sched_:sched.Sched = new sched.Sched();
     private ticker_:ticker.Ticker = new ticker.Ticker();
@@ -20,12 +18,12 @@ export class Executer{
         var self = this;
         self.is_run_ = true;
         self.ticker_.update();
-        taskExecuter(function loop(){
+        taskExecutor(function loop(){
             if(self.is_run_){
                 var oldtick:number = self.ticker_.update();
                 var nowtick:number = self.ticker_.tick();
                 self.sched_.update(nowtick, oldtick);
-                taskExecuter(loop);
+                taskExecutor(loop);
             }
         });
     }
@@ -33,10 +31,12 @@ export class Executer{
         return this.sched_.addTask(func, this.ticker_.futureTick(wait_time));
     }
 }
-var instance:Executer = null;
-export function executer():Executer{
-    if(instance){
-        return instance;
+export module executor{
+    var instance_:Executor = null;
+    export function instance():Executor{
+        if(instance_){
+            return instance_;
+        }
+        return instance_ = new Executor();
     }
-    return instance = new Executer();
 }

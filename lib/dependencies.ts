@@ -1,6 +1,6 @@
 ///<reference path='node.d'/>
 export function tick():number=>process.uptime()
-export function createExecuter( resolution:number ):(arg:Function)=>void{
+export function createExecutor( resolution:number ):(arg:Function)=>void{
     if(resolution === 0){
         if(global.setImmediate){
             return (func:Function):void=>{global.setImmediate(func)}

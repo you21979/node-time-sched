@@ -1,6 +1,6 @@
 ///<reference path='node.d'/>
-import executer = module('executer');
-var e:Function = executer.executer;
+import executor = module('executor');
+var e:Function = executor.executor.instance;
 var f:Function = ()=>{console.log("x:"+process.uptime());}
 for(var i:number=0; i<6; ++i){
     console.log(e().addTask(f, i));

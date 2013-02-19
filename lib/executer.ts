@@ -39,4 +39,3 @@ export function executer():Executer{
     }
     return instance = new Executer();
 }
-executer().run();

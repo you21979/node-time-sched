@@ -1,7 +1,11 @@
 ///<reference path='node.d'/>
-import ticker = module('ticker');
-var t:ticker.Ticker = new ticker.Ticker();
-console.log(t);
-t.update();
-console.log(t);
-console.log(t.futureTick(5));
+export interface Task{
+    func:Function;
+    invoke_tick:number;
+}
+export function createTask(func:Function, invoke_tick:number):Task{
+    return {
+        func : func,
+        invoke_tick : invoke_tick
+    };
+}

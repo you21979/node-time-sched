@@ -8,7 +8,7 @@ COMPILE = $(TSC) --sourcemap --target ES5
 EXEC = $(COMPILE) -e
 
 #make target
-MAIN = index.ts
+MAIN = test.ts
 SRCDIR = .
 
 ######################################################

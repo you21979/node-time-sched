@@ -2,6 +2,7 @@
 import d = module('dependencies');
 import sched = module('sched');
 import ticker = module('ticker');
+import task = module('task');
 
 var taskExecuter:(arg:Function)=>void = d.createExecuter(0);
 
@@ -26,6 +27,9 @@ export class Executer{
                 taskExecuter(loop);
             }
         });
+    }
+    public addTask(func:Function,wait_time:number):task.Task{
+        return this.sched_.addTask(func, this.ticker_.futureTick(wait_time));
     }
 }
 var instance:Executer = null;

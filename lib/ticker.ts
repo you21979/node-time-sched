@@ -8,8 +8,10 @@ export class Ticker{
     public tick():number{
         return this.tick_;
     }
-    public update():void{
+    public update():number{
+        var old:number = this.tick_;
         this.tick_ = tick();
+        return old;
     }
     public futureTick(count:number):number{
         return this.tick_ + count;

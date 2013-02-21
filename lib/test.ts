@@ -11,11 +11,14 @@ e().addTask(function(){
 }, i);
 e().run();
 */
+var i = 0;
+var r = ()=>++i
 var m = 0;
-for(var i=0;i<100;++i){
-    e().addTask(function T(){
-        console.log("a");
-//        console.log(e().addTask(T,Math.random()).invoke_tick);
-    }, Math.random());
+for(var i=0;i<10;++i){
+    var x = e().addTask(function T(){
+        e().addTask(T,Math.random();
+    }, Math.random()*60);
 }
+
 e().run();
+e().sched_.list_.scanHead((n)=>{console.log(n.invoke_tick);return true});

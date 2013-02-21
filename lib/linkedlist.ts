@@ -150,7 +150,26 @@ export class List{
         }
         return null;
     }
+    public remove(node:INode):void{
+        if(this.length_ > 0){
+            if(node === this.head_){
+                this.head_ = node.next;
+                if(this.head_ === null){
+                    this.tail_ = null;
+                }
+            }
+            if(node === this.tail_){
+                this.tail_ = node.prev;
+                if(this.tail_ === null){
+                    this.head_ = null;
+                }
+            }
+            unlink(node);
+            --this.length_;
+        }
+    }
 }
+/*
 module Test{
     var x:number = 0;
     class TNode implements INode{
@@ -178,3 +197,4 @@ module Test{
     }
     insertHeadCond();
 }
+*/

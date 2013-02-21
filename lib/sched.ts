@@ -1,23 +1,24 @@
 ///<reference path='node.d'/>
 import d = module('dependencies');
 import task = module('task');
-import slist = module('slist');
+import linkedlist = module('linkedlist');
 /**
  * Schedクラス
  * @class
  */ 
 export class Sched{
-    private list_:slist.SList = new slist.SList();
+    private list_:linkedlist.List = new linkedlist.List();
     private tick_:number = -1;
     constructor(){}
     public update(now:number, old:number):void{
         this.tick_ = now; 
-        this.list_.removeScan((v:task.ITask):bool=>{
+        this.list_.scanHead((v:task.ITask):bool=>{
             if(v.invoke_tick > now){
                 return false;
             }
+            this.list_.remove(v);
             if(v.func){
-                process.nextTick(v.func);
+                v.func();
                 v.func = null;
             }
             return true;
@@ -25,7 +26,7 @@ export class Sched{
     }
     public addTask(func:Function, invoke_tick:number):task.ITask{
         var t:task.ITask = task.createTask(func, invoke_tick);
-        this.list_.insert(t, task_insert_cond);
+        this.list_.insertHeadCond(t, task_insert_cond);
         return t;
     }
     public removeTask(t:task.ITask):void{
@@ -34,4 +35,4 @@ export class Sched{
         }
     }
 }
-function task_insert_cond(a:task.ITask, b:task.ITask):bool=>a.invoke_tick > b.invoke_tick;
+function task_insert_cond(a:task.ITask, b:task.ITask):bool=>a.invoke_tick >= b.invoke_tick;

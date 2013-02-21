@@ -16,7 +16,7 @@ var r = ()=>++i
 var m = 0;
 for(var i=0;i<10;++i){
     var x = e().addTask(function T(){
-        e().addTask(T,Math.random();
+        e().addTask(T,Math.random());
     }, Math.random()*60);
 }
 

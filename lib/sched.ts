@@ -1,43 +1,37 @@
 ///<reference path='node.d'/>
 import d = module('dependencies');
 import task = module('task');
+import slist = module('slist');
 /**
  * Schedクラス
  * @class
  */ 
 export class Sched{
-    private list_:task.Task[] = [];
+    private list_:slist.SList = new slist.SList();
     private tick_:number = -1;
-    constructor(){
-    }
+    constructor(){}
     public update(now:number, old:number):void{
         this.tick_ = now; 
-        var remove:number[]= [];
-        
-        this.list_.some((v:task.Task, idx:number):bool=>{
+        this.list_.removeScan((v:task.ITask):bool=>{
             if(v.invoke_tick > now){
                 return false;
             }
             if(v.func){
-                v.func();
+                process.nextTick(v.func);
+                v.func = null;
             }
-            remove.push(idx);
             return true;
         });
-        var self = this;
-        remove.forEach((n:number)=>{
-            self.list_.splice(n, 1);
-        });
     }
-    public addTask(func:Function, invoke_tick:number):task.Task{
-        var t:task.Task = task.createTask(func, invoke_tick);
-        this.list_.push(t);
-        this.list_.sort((a:task.Task,b:task.Task)=>a.invoke_tick-b.invoke_tick);
+    public addTask(func:Function, invoke_tick:number):task.ITask{
+        var t:task.ITask = task.createTask(func, invoke_tick);
+        this.list_.insert(t, task_insert_cond);
         return t;
     }
-    public removeTask(t:task.Task):void{
+    public removeTask(t:task.ITask):void{
         if(t){
             t.func = null;
         }
     }
 }
+function task_insert_cond(a:task.ITask, b:task.ITask):bool=>a.invoke_tick > b.invoke_tick;

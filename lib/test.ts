@@ -12,9 +12,10 @@ e().addTask(function(){
 e().run();
 */
 var m = 0;
-for(var i=0;i<10000;++i){
+for(var i=0;i<100;++i){
     e().addTask(function T(){
-        console.log(e().addTask(T,0));
-    }, 0);
+        console.log("a");
+//        console.log(e().addTask(T,Math.random()).invoke_tick);
+    }, Math.random());
 }
 e().run();

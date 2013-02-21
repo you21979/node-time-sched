@@ -57,14 +57,28 @@ export class SList{
         }
         f(null, this.head_);
     }
-    public same(func:(v:INode)=>bool):void{
-        var n:INode = this.head_;
-        while(n){
-            var ret:bool = func(n);
+    public removeScan(func:(v:INode)=>bool):void{
+        var c:INode = this.head_;
+        var p:INode = null;
+        while(c){
+            var ret:bool = func(c);
             if(!ret){
                 break;
             }
-            n = n.next;
+            p = c;
+            c = c.next;
+            p.next = null;
+        }
+        this.head_ = c;
+    }
+    public same(func:(v:INode)=>bool):void{
+        var c:INode = this.head_;
+        while(c){
+            var ret:bool = func(c);
+            if(!ret){
+                break;
+            }
+            c = c.next;
         }
     }
     public forEach(func:(v:INode)=>void):void{

@@ -19,19 +19,18 @@ export class Executor{
         this.is_run_ = false;
     }
     public run():void{
-        var self = this;
-        self.is_run_ = true;
-        self.ticker_.update();
-        taskExecutor(function loop(){
-            if(self.is_run_){
-                var oldtick:number = self.ticker_.update();
-                var nowtick:number = self.ticker_.tick();
-                self.sched_.update(nowtick, oldtick);
+        this.is_run_ = true;
+        this.ticker_.update();
+        taskExecutor(function loop():void=>{
+            if(this.is_run_){
+                var oldtick:number = this.ticker_.update();
+                var nowtick:number = this.ticker_.tick();
+                this.sched_.update(nowtick, oldtick);
                 taskExecutor(loop);
             }
         });
     }
-    public addTask(func:Function,wait_time:number):task.Task{
+    public addTask(func:Function,wait_time:number):task.ITask{
         return this.sched_.addTask(func, this.ticker_.futureTick(wait_time));
     }
 }

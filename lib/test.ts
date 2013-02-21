@@ -17,8 +17,9 @@ var m = 0;
 for(var i=0;i<10;++i){
     var x = e().addTask(function T(){
         e().addTask(T,Math.random());
-    }, Math.random()*60);
+//    }, Math.random()*60);
+    }, 1);
 }
 
 e().run();
-e().sched_.list_.scanHead((n)=>{console.log(n.invoke_tick);return true});
+e().sched_.list_.scanHead((n)=>{console.log("%d id:%d",n.invoke_tick,n.id);return true});

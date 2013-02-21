@@ -35,4 +35,7 @@ export class Sched{
         }
     }
 }
-function task_insert_cond(a:task.ITask, b:task.ITask):bool=>a.invoke_tick >= b.invoke_tick;
+/**
+ *
+ */
+function task_insert_cond(a:task.ITask, b:task.ITask):bool=>a.invoke_tick > b.invoke_tick;

@@ -48,32 +48,29 @@ export class Node implements INode{
     constructor(){}
 }
 export class List{
-    private head_:INode = null;
-    private tail_:INode = null;
-    private length_:number = 0;
+    public head_:INode = null;
+    public tail_:INode = null;
+    public length_:number = 0;
     constructor(){}
-    public insertTailCond(node:INode, condfunc:(linked:INode,unlinked:INode)=>bool):void{
-        var target:INode = this.scanTail((n)=>!condfunc(n, node));
-        if(target){
+    public isEmpty():bool{
+        return (this.length_ === 0) ? true : false;
+    }
+    public insertAfter(target:INode, node:INode):void{
+        if(!this.isEmpty()){
             after_insert(target, node);
             if(node.next === null){
                 this.tail_ = node;
             }
             ++this.length_;
-        }else{
-            this.pushHead(node);
         }
     }
-    public insertHeadCond(node:INode, condfunc:(linked:INode,unlinked:INode)=>bool):void{
-        var target:INode = this.scanHead((n)=>!condfunc(n, node));
-        if(target){
+    public insertBefore(target:INode, node:INode):void{
+        if(!this.isEmpty()){
             before_insert(target, node);
             if(node.prev === null){
                 this.head_ = node;
             }
             ++this.length_;
-        }else{
-            this.pushTail(node);
         }
     }
     public pushTail(node:INode):void{

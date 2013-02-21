@@ -168,6 +168,9 @@ export class List{
             --this.length_;
         }
     }
+    get length():number{
+        return this.length_;
+    }
 }
 /*
 module Test{
